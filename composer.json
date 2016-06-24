@@ -1,0 +1,19 @@
+{
+    "name": "Sourcebox/haveibeenpwnd-csv-checker",
+    "require": {
+        "xsist10/haveibeenpwned": "^1.0",
+        "league/csv": "^8.0",
+        "symfony/console": "^3.1"
+    },
+    "autoload": {
+        "psr-4": {
+            "Sourcebox\\HaveIBeenPwnedCLI\\": "src/"
+        }
+    },
+    "authors": [
+        {
+            "name": "Kevin Vandenborne",
+            "email": "kevin.vandenborne@gmail.com"
+        }
+    ]
+}
