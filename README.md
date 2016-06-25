@@ -1,6 +1,6 @@
 # HaveIBeenPwned CLI Checker
 
-This is a CLI tool to check a csv of email addresses and user names in https://haveibeenpwned.com
+This is a CLI tool to check a csv of email addresses and usernames in https://haveibeenpwned.com
 
 It's sloppy code, I wanted to quickly check a bunch of emails - but putting this on github because it might be of use to someone else.
 
