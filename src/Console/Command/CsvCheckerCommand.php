@@ -54,24 +54,25 @@ class CsvCheckerCommand extends Command
 
     private function getAccountBreaches(HaveIBeenPwned $haveIBeenPwned, $accountIdentifier)
     {
-        $parsedBreaches = $this->parseBreaches($haveIBeenPwned->checkAccount($accountIdentifier));
+        list ($dates, $domains) = $this->parseBreaches($haveIBeenPwned->checkAccount($accountIdentifier));
 
         return [
             $accountIdentifier,
-            count($parsedBreaches) ? 'Yes' : 'No',
-            implode("\n", array_keys($parsedBreaches)),
-            implode("\n", $parsedBreaches),
+            count($dates) ? 'Yes' : 'No',
+            implode("\n", $dates),
+            implode("\n", $domains),
         ];
     }
 
     private function parseBreaches($breaches)
     {
-        $parsedBreaches = [];
+        $dates = $domains = [];
         foreach ($breaches as $breach) {
-          $parsedBreaches[$breach['BreachDate']] = sprintf('%s (%s)', $breach['Title'], $breach['Domain']);
+          $dates[] = $breach['BreachDate'];
+          $domains[] = sprintf('%s (%s)', $breach['Title'], $breach['Domain']);
         }
 
-        return $parsedBreaches;
+        return array($dates, $domains);
     }
 
     private function renderTable(OutputInterface $output, Array $rows)
