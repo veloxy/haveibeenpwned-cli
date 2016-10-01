@@ -1,0 +1,29 @@
+{
+  "alias": "haveibeenpwned.phar",
+  "chmod": "0755",
+  "compactors": [
+    "Herrera\\Box\\Compactor\\Json"
+  ],
+  "directories": [
+    "src"
+  ],
+  "extract": true,
+  "files": [
+    "README.md"
+  ],
+  "finder": [
+    {
+      "name": "*.php",
+      "exclude": [
+        "tests",
+        "test",
+        "Test",
+        "Tests"
+      ],
+      "in": "vendor"
+    }
+  ],
+  "main": "console.php",
+  "output": "haveibeenpwned.phar",
+  "stub": true
+}
