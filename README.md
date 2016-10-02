@@ -18,7 +18,7 @@ Clone the repository and run `composer install`
 Get a list of e-mails from somewhere, check example.csv for the correct format. In my case, I exported a list of e-mails from 1Password.
 
 ```
-$ php console.php check:csv example.csv
+$ php console.php example.csv
 +---------------------+----------+-------------+-----------------------------------------+
 | Account             | Breached | Breach Date | Company                                 |
 +---------------------+----------+-------------+-----------------------------------------+
