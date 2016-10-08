@@ -6,8 +6,7 @@
         "symfony/console": "^3.1",
         "symfony/dependency-injection": "^3.1",
         "symfony/config": "^3.1",
-        "symfony/yaml": "^3.1",
-        "symfony/var-dumper": "^3.1"
+        "symfony/yaml": "^3.1"
     },
     "autoload": {
         "psr-4": {
@@ -19,5 +18,9 @@
             "name": "Kevin Vandenborne",
             "email": "kevin.vandenborne@gmail.com"
         }
-    ]
+    ],
+    "require-dev": {
+        "symfony/var-dumper": "^3.1",
+        "phpunit/phpunit": "^5.6"
+    }
 }

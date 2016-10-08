@@ -12,7 +12,7 @@ class Account
     /**
      * @var Breach[]
      */
-    private $breaches;
+    private $breaches = [];
 
     /**
      * @return string

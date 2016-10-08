@@ -1,10 +1,19 @@
 services:
+    have_i_been_pwnded:
+        class: xsist10\HaveIBeenPwned\HaveIBeenPwned
+
+    sourcebox.have_ibeen_pwned_cli.service.have_ibeen_pwned_breach_data_finder_service:
+        class: Sourcebox\HaveIBeenPwnedCLI\Service\HaveIBeenPwnedBreachDataFinderService
+        arguments:
+            - "@have_i_been_pwnded"
+
     sourcebox.have_ibeen_pwned_cli.service.console_table_report_service:
         class: Sourcebox\HaveIBeenPwnedCLI\Service\ConsoleTableReportService
 
     sourcebox.have_ibeen_pwned_cli.console.command.csv_checker_command:
         class: Sourcebox\HaveIBeenPwnedCLI\Console\Command\CsvCheckerCommand
         arguments:
+            - "@sourcebox.have_ibeen_pwned_cli.service.have_ibeen_pwned_breach_data_finder_service"
             - "@sourcebox.have_ibeen_pwned_cli.service.console_table_report_service"
         tags:
             - { name: console.command }

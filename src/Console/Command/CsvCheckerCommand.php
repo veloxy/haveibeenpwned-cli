@@ -3,18 +3,14 @@
 namespace Sourcebox\HaveIBeenPwnedCLI\Console\Command;
 
 use League\Csv\Reader;
-use Sourcebox\HaveIBeenPwnedCLI\Model\Account;
-use Sourcebox\HaveIBeenPwnedCLI\Model\Breach;
 use Sourcebox\HaveIBeenPwnedCLI\Model\BreachData;
+use Sourcebox\HaveIBeenPwnedCLI\Service\BreachDataFinderServiceInterface;
 use Sourcebox\HaveIBeenPwnedCLI\Service\ReportServiceInterface;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Helper\ProgressBar;
-use Symfony\Component\Console\Helper\Table;
-use Symfony\Component\Console\Helper\TableSeparator;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
-use xsist10\HaveIBeenPwned\HaveIBeenPwned;
 
 class CsvCheckerCommand extends Command
 {
@@ -24,43 +20,65 @@ class CsvCheckerCommand extends Command
     private $reportService;
 
     /**
+     * @var BreachDataFinderServiceInterface
+     */
+    private $breachDataFinderService;
+
+    /**
      * CsvCheckerCommand constructor.
+     * @param BreachDataFinderServiceInterface $breachDataFinderService
      * @param ReportServiceInterface $reportService
      */
-    public function __construct(ReportServiceInterface $reportService)
+    public function __construct(BreachDataFinderServiceInterface $breachDataFinderService, ReportServiceInterface $reportService)
     {
+        $this->breachDataFinderService = $breachDataFinderService;
         $this->reportService = $reportService;
 
         parent::__construct();
     }
 
+    /**
+     * {@inheritdoc}
+     */
     protected function configure()
     {
-        $this
-            ->setName('check:csv')
+        $this->setName('check:csv')
             ->setDescription('Checks https://haveibeenpwned.com\'s API using provided CSV of user names/emails')
             ->addArgument('csv', InputArgument::REQUIRED, 'Path to CSV file');
     }
 
+    /**
+     * @param InputInterface $input
+     * @param OutputInterface $output
+     * @return int|null|void
+     */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        $list = Reader::createFromPath($input->getArgument('csv'))->fetchAll();
+        $accountIdentifiers = Reader::createFromPath($input->getArgument('csv'))->fetchAll();
 
-        $rows = [];
-        $alreadyChecked = [];
-
-        $progress = new ProgressBar($output, count($list));
+        $progress = new ProgressBar($output, count($accountIdentifiers));
         $progress->start();
 
         $breachData = new BreachData();
-        foreach ($list as $item) {
-            $accountIdentifier = reset($item);
-            if (strlen($accountIdentifier) > 3 && !isset($alreadyChecked[$accountIdentifier])) {
-                $breachData->addAccount($this->getAccountBreachData($accountIdentifier));
-                $alreadyChecked[$accountIdentifier] = 1;
-                usleep(1500000); // HaveIBeenPwned has a rate limit of 1500 milliseconds.
+        $checked = [];
+
+        foreach ($accountIdentifiers as $accountIdentifierRow) {
+
+            $accountIdentifier = reset($accountIdentifierRow);
+
+            if (array_key_exists($accountIdentifier, $checked)) {
+                $progress->advance();
+                return;
             }
 
+            $account = $this->getBreachedAccountData($accountIdentifier);
+            if ($account) {
+                $breachData->addAccount($account);
+            }
+
+            usleep(1500000);
+
+            $checked[$accountIdentifier] = true;
             $progress->advance();
         }
 
@@ -70,28 +88,16 @@ class CsvCheckerCommand extends Command
         $this->reportService->report($breachData);
     }
 
-    private function getAccountBreachData($accountIdentifier)
+    /**
+     * @param $accountIdentifier
+     * @return \Sourcebox\HaveIBeenPwnedCLI\Model\Account|void
+     */
+    private function getBreachedAccountData($accountIdentifier)
     {
-        $haveIBeenPwned = new HaveIBeenPwned();
-        $account = new Account();
-        $account->setAccountIdentifier($accountIdentifier);
-
-        $breaches = $haveIBeenPwned->checkAccount($accountIdentifier);
-
-        foreach ($breaches as $breach) {
-            $accountBreach = new Breach();
-            $accountBreach->setName($breach['Name'])
-                ->setTitle($breach['Name'])
-                ->setDescription($breach['Description'])
-                ->setActive($breach['IsActive'])
-                ->setVerified($breach['IsVerified'])
-                ->setRetired($breach['IsRetired'])
-                ->setAddedDate(new \DateTime($breach['AddedDate']))
-                ->setBreachData(new \DateTime($breach['BreachDate']))
-                ->setPwnCount($breach['PwnCount'])
-                ->setSensitive($breach['IsSensitive']);
-
-            $account->addBreach($accountBreach);
+        try {
+            $account = $this->breachDataFinderService->findBreachDataForAccountIdentifier($accountIdentifier);
+        } catch (\Exception $e) {
+            return;
         }
 
         return $account;

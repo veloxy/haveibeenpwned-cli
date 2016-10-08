@@ -19,10 +19,11 @@ class ConsoleTableReportService implements ReportServiceInterface
         $table = new Table(new ConsoleOutput());
         $table->setHeaders(['Account', 'Breached', 'Breach Date', 'Company']);
 
-        foreach ($data->getAccounts() as $key => $account) {
+        $accounts = $data->getAccounts();
+        foreach ($accounts as $key => $account) {
             $table->addRow($this->getAccountAsRow($account));
 
-            if ($account !== end($data->getAccounts())) {
+            if ($account !== end($accounts)) {
                 $table->addRow(new TableSeparator());
             }
         }
