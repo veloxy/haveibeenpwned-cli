@@ -6,7 +6,7 @@ use Sourcebox\HaveIBeenPwnedCLI\Model\Account;
 use Sourcebox\HaveIBeenPwnedCLI\Model\Breach;
 use xsist10\HaveIBeenPwned\HaveIBeenPwned;
 
-class HaveIBeenPwnedBreadDataFinderServiceTest extends \PHPUnit_Framework_TestCase
+class HaveIBeenPwnedBreachDataFinderServiceTest extends \PHPUnit_Framework_TestCase
 {
     /**
      * @var HaveIBeenPwnedBreachDataFinderService
