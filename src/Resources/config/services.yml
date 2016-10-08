@@ -1,0 +1,5 @@
+services:
+  sourcebox.have_ibeen_pwned_cli.console.command.csv_checker_command:
+    class: Sourcebox\HaveIBeenPwnedCLI\Console\Command\CsvCheckerCommand
+    tags:
+        - { name: console.command }
