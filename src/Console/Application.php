@@ -26,19 +26,6 @@ class Application extends BaseApplication
     }
 
     /**
-     * Gets the default commands that should always be available.
-     *
-     * @return array An array of default Command instances
-     */
-    protected function getDefaultCommands()
-    {
-        $defaultCommands = parent::getDefaultCommands();
-        $defaultCommands[] = new CsvCheckerCommand();
-
-        return $defaultCommands;
-    }
-
-    /**
      * Overridden so that the application doesn't expect the command
      * name to be the first argument.
      */

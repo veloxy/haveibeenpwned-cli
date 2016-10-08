@@ -3,6 +3,10 @@
 namespace Sourcebox\HaveIBeenPwnedCLI\Console\Command;
 
 use League\Csv\Reader;
+use Sourcebox\HaveIBeenPwnedCLI\Model\Account;
+use Sourcebox\HaveIBeenPwnedCLI\Model\Breach;
+use Sourcebox\HaveIBeenPwnedCLI\Model\BreachData;
+use Sourcebox\HaveIBeenPwnedCLI\Service\ReportServiceInterface;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Helper\ProgressBar;
 use Symfony\Component\Console\Helper\Table;
@@ -14,6 +18,22 @@ use xsist10\HaveIBeenPwned\HaveIBeenPwned;
 
 class CsvCheckerCommand extends Command
 {
+    /**
+     * @var ReportServiceInterface
+     */
+    private $reportService;
+
+    /**
+     * CsvCheckerCommand constructor.
+     * @param ReportServiceInterface $reportService
+     */
+    public function __construct(ReportServiceInterface $reportService)
+    {
+        $this->reportService = $reportService;
+
+        parent::__construct();
+    }
+
     protected function configure()
     {
         $this
@@ -24,7 +44,6 @@ class CsvCheckerCommand extends Command
 
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        $haveIBeenPwned = new HaveIBeenPwned();
         $list = Reader::createFromPath($input->getArgument('csv'))->fetchAll();
 
         $rows = [];
@@ -33,11 +52,11 @@ class CsvCheckerCommand extends Command
         $progress = new ProgressBar($output, count($list));
         $progress->start();
 
+        $breachData = new BreachData();
         foreach ($list as $item) {
             $accountIdentifier = reset($item);
             if (strlen($accountIdentifier) > 3 && !isset($alreadyChecked[$accountIdentifier])) {
-                $rows[] = $this->getAccountBreaches($haveIBeenPwned, $accountIdentifier);
-                $rows[] = new TableSeparator();
+                $breachData->addAccount($this->getAccountBreachData($accountIdentifier));
                 $alreadyChecked[$accountIdentifier] = 1;
                 usleep(1500000); // HaveIBeenPwned has a rate limit of 1500 milliseconds.
             }
@@ -48,38 +67,33 @@ class CsvCheckerCommand extends Command
         $progress->finish();
         $progress->clear();
 
-        array_pop($rows); // Remove last TableSeparator
-        $this->renderTable($output, $rows);
+        $this->reportService->report($breachData);
     }
 
-    private function getAccountBreaches(HaveIBeenPwned $haveIBeenPwned, $accountIdentifier)
+    private function getAccountBreachData($accountIdentifier)
     {
-        list ($dates, $domains) = $this->parseBreaches($haveIBeenPwned->checkAccount($accountIdentifier));
+        $haveIBeenPwned = new HaveIBeenPwned();
+        $account = new Account();
+        $account->setAccountIdentifier($accountIdentifier);
 
-        return [
-            $accountIdentifier,
-            count($dates) ? 'Yes' : 'No',
-            implode("\n", $dates),
-            implode("\n", $domains),
-        ];
-    }
+        $breaches = $haveIBeenPwned->checkAccount($accountIdentifier);
 
-    private function parseBreaches($breaches)
-    {
-        $dates = $domains = [];
         foreach ($breaches as $breach) {
-          $dates[] = $breach['BreachDate'];
-          $domains[] = sprintf('%s (%s)', $breach['Title'], $breach['Domain']);
+            $accountBreach = new Breach();
+            $accountBreach->setName($breach['Name'])
+                ->setTitle($breach['Name'])
+                ->setDescription($breach['Description'])
+                ->setActive($breach['IsActive'])
+                ->setVerified($breach['IsVerified'])
+                ->setRetired($breach['IsRetired'])
+                ->setAddedDate(new \DateTime($breach['AddedDate']))
+                ->setBreachData(new \DateTime($breach['BreachDate']))
+                ->setPwnCount($breach['PwnCount'])
+                ->setSensitive($breach['IsSensitive']);
+
+            $account->addBreach($accountBreach);
         }
 
-        return array($dates, $domains);
-    }
-
-    private function renderTable(OutputInterface $output, Array $rows)
-    {
-        $table = new Table($output);
-        $table->setHeaders(['Account', 'Breached', 'Breach Date', 'Company']);
-        $table->setRows($rows);
-        $table->render();
+        return $account;
     }
 }
