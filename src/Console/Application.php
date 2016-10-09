@@ -2,7 +2,6 @@
 
 namespace Sourcebox\HaveIBeenPwnedCLI\Console;
 
-use Sourcebox\HaveIBeenPwnedCLI\Console\Command\CsvCheckerCommand;
 use Symfony\Component\Console\Application as BaseApplication;
 use Symfony\Component\Console\Input\InputInterface;
 
