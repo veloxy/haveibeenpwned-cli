@@ -80,7 +80,7 @@ class HaveIBeenPwnedBreachDataFinderService implements BreachDataFinderServiceIn
             ->setVerified($breach['IsVerified'])
             ->setRetired($breach['IsRetired'])
             ->setAddedDate(new \DateTime($breach['AddedDate']))
-            ->setBreachData(new \DateTime($breach['BreachDate']))
+            ->setBreachDate(new \DateTime($breach['BreachDate']))
             ->setPwnCount($breach['PwnCount'])
             ->setSensitive($breach['IsSensitive']);
 

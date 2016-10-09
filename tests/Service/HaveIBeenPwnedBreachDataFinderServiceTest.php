@@ -45,7 +45,7 @@ class HaveIBeenPwnedBreachDataFinderServiceTest extends \PHPUnit_Framework_TestC
             ->setVerified(true)
             ->setRetired(false)
             ->setAddedDate(new \DateTime('2016-10-01'))
-            ->setBreachData(new \DateTime('2016-10-01'))
+            ->setBreachDate(new \DateTime('2016-10-01'))
             ->setPwnCount(100)
             ->setSensitive(true);
 
@@ -55,5 +55,40 @@ class HaveIBeenPwnedBreachDataFinderServiceTest extends \PHPUnit_Framework_TestC
 
         $actual = $this->haveIBeenPwnedBreachDataFinderService->findBreachDataForAccountIdentifier('dummy');
         $this->assertEquals($expected, $actual);
+    }
+
+    /**
+     * @expectedException \Exception
+     * @expectedExceptionMessage No account identifier given
+     */
+    public function testFindBreachDataForAccountIdentifierThrowsNoAccountIDException()
+    {
+        $this->haveIBeenPwnedBreachDataFinderService->findBreachDataForAccountIdentifier('');
+    }
+
+    /**
+     * @expectedException \Exception
+     * @expectedExceptionMessage Account identifier should be at least 3 characters long
+     */
+    public function testFindBreachDataForAccountIdentifierThrowsAccountIDTooShortException()
+    {
+        $this->haveIBeenPwnedBreachDataFinderService->findBreachDataForAccountIdentifier('12');
+    }
+
+    public function testFindBreachDataForAccountIdentifierReturnsUnbreachedAccount()
+    {
+        $accountName = 'fake-account@fake-accounts.fake';
+
+        $account = new Account();
+        $account->setAccountIdentifier($accountName);
+
+        $haveIBeenPwnedMock = $this->createMock(HaveIBeenPwned::class);
+        $haveIBeenPwnedMock->method('checkAccount')
+            ->willReturn([]);
+
+        $haveIBeenPwnedBreachDataFinderService = new HaveIBeenPwnedBreachDataFinderService($haveIBeenPwnedMock);
+        $actual = $haveIBeenPwnedBreachDataFinderService->findBreachDataForAccountIdentifier($accountName);
+
+        $this->assertEquals($account, $actual);
     }
 }

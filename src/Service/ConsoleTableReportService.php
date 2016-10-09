@@ -7,16 +7,31 @@ use Sourcebox\HaveIBeenPwnedCLI\Model\Breach;
 use Sourcebox\HaveIBeenPwnedCLI\Model\BreachData;
 use Symfony\Component\Console\Helper\Table;
 use Symfony\Component\Console\Helper\TableSeparator;
-use Symfony\Component\Console\Output\ConsoleOutput;
+use Symfony\Component\Console\Output\ConsoleOutputInterface;
+use Symfony\Component\Console\Output\OutputInterface;
 
 class ConsoleTableReportService implements ReportServiceInterface
 {
+    /**
+     * @var ConsoleOutputInterface
+     */
+    private $consoleOutput;
+
+    /**
+     * ConsoleTableReportService constructor.
+     * @param OutputInterface $consoleOutput
+     */
+    public function __construct(OutputInterface $consoleOutput)
+    {
+        $this->consoleOutput = $consoleOutput;
+    }
+
     /**
      * {@inheritdoc}
      */
     public function report(BreachData $data)
     {
-        $table = new Table(new ConsoleOutput());
+        $table = new Table($this->consoleOutput);
         $table->setHeaders(['Account', 'Breached', 'Breach Date', 'Company']);
 
         $accounts = $data->getAccounts();
@@ -43,7 +58,7 @@ class ConsoleTableReportService implements ReportServiceInterface
         $row[] = $account->hasBreaches() ? 'Yes' : 'No';
 
         $row[] = implode("\n", array_map(function (Breach $data) {
-            $date = $data->getBreachData();
+            $date = $data->getBreachDate();
             return $date->format('Y-m-d');
         }, $account->getBreaches()));
 

@@ -17,7 +17,7 @@ class Breach
     /**
      * @var \DateTime
      */
-    private $breachData;
+    private $breachDate;
 
     /**
      * @var \DateTime
@@ -95,18 +95,18 @@ class Breach
     /**
      * @return \DateTime
      */
-    public function getBreachData()
+    public function getBreachDate()
     {
-        return $this->breachData;
+        return $this->breachDate;
     }
 
     /**
-     * @param \DateTime $breachData
+     * @param \DateTime $breachDate
      * @return Breach
      */
-    public function setBreachData($breachData)
+    public function setBreachDate($breachDate)
     {
-        $this->breachData = $breachData;
+        $this->breachDate = $breachDate;
 
         return $this;
     }
