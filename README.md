@@ -3,6 +3,7 @@
 [![Software License][ico-license]](LICENSE.md)
 [![Build Status][ico-travis]][link-travis]
 [![SensioLabs Insight][ico-sensio]][link-sensio]
+[![StyleCI][ico-styleci]][link-styleci]
 
 This is a CLI tool to check a csv of email addresses and usernames in https://haveibeenpwned.com
 
@@ -71,6 +72,8 @@ $ php console.php example.csv
 [ico-license]: https://img.shields.io/badge/license-MIT-brightgreen.svg?style=flat-square
 [ico-travis]: https://img.shields.io/travis/veloxy/haveibeenpwned-cli/master.svg?style=flat-square
 [ico-sensio]: https://img.shields.io/sensiolabs/i/d3fd9ce4-f451-48b4-89c4-d9cf47a28bdf.svg?maxAge=3600&style=flat-square
+[ico-styleci]: https://styleci.io/repos/61910203/shield?branch=master
 
 [link-travis]: https://travis-ci.org/veloxy/haveibeenpwned-cli
 [link-sensio]: https://insight.sensiolabs.com/projects/d3fd9ce4-f451-48b4-89c4-d9cf47a28bdf
+[link-styleci]: https://styleci.io/repos/61910203
