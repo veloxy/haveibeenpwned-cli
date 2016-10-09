@@ -29,8 +29,10 @@ class CsvCheckerCommand extends Command
      * @param BreachDataFinderServiceInterface $breachDataFinderService
      * @param ReportServiceInterface $reportService
      */
-    public function __construct(BreachDataFinderServiceInterface $breachDataFinderService, ReportServiceInterface $reportService)
-    {
+    public function __construct(
+        BreachDataFinderServiceInterface $breachDataFinderService,
+        ReportServiceInterface $reportService
+    ) {
         $this->breachDataFinderService = $breachDataFinderService;
         $this->reportService = $reportService;
 
@@ -63,7 +65,6 @@ class CsvCheckerCommand extends Command
         $checked = [];
 
         foreach ($accountIdentifiers as $accountIdentifierRow) {
-
             $accountIdentifier = reset($accountIdentifierRow);
 
             if (array_key_exists($accountIdentifier, $checked)) {

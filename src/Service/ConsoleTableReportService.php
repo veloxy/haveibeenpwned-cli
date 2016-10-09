@@ -42,12 +42,12 @@ class ConsoleTableReportService implements ReportServiceInterface
         $row[] = $account->getAccountIdentifier();
         $row[] = $account->hasBreaches() ? 'Yes' : 'No';
 
-        $row[] = implode("\n", array_map(function(Breach $data) {
+        $row[] = implode("\n", array_map(function (Breach $data) {
             $date = $data->getBreachData();
             return $date->format('Y-m-d');
         }, $account->getBreaches()));
 
-        $row[] = implode("\n", array_map(function(Breach $data) {
+        $row[] = implode("\n", array_map(function (Breach $data) {
             return sprintf('%s (%s)', $data->getTitle(), $data->getName());
         }, $account->getBreaches()));
 

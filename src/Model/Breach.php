@@ -2,7 +2,6 @@
 
 namespace Sourcebox\HaveIBeenPwnedCLI\Model;
 
-
 class Breach
 {
     /**
