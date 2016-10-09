@@ -2,7 +2,7 @@
 
 This is a CLI tool to check a csv of email addresses and usernames in https://haveibeenpwned.com
 
-It's sloppy code, I wanted to quickly check a bunch of emails - but putting this on github because it might be of use to someone else.
+[![SensioLabsInsight](https://insight.sensiolabs.com/projects/d3fd9ce4-f451-48b4-89c4-d9cf47a28bdf/big.png)](https://insight.sensiolabs.com/projects/d3fd9ce4-f451-48b4-89c4-d9cf47a28bdf)
 
 ## Requirements
 
