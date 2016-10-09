@@ -7,8 +7,6 @@ use Sourcebox\HaveIBeenPwnedCLI\Console\Application;
 
 require __DIR__.'/vendor/autoload.php';
 
-ini_set("auto_detect_line_endings", '1');
-
 $container = new ContainerBuilder();
 
 $loader = new YamlFileLoader($container, new FileLocator(__DIR__.'/src/Resources/config/'));
