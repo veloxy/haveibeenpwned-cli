@@ -1,6 +1,7 @@
 {
     "name": "sourcebox/haveibeenpwnd-csv-checker",
     "description": "This is a CLI tool to check a csv of email addresses and user names in https://haveibeenpwned.com",
+    "license": "MIT",
     "require": {
         "xsist10/haveibeenpwned": "^1.0",
         "league/csv": "^8.0",
