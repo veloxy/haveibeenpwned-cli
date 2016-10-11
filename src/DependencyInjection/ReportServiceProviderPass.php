@@ -2,12 +2,18 @@
 
 namespace Sourcebox\HaveIBeenPwnedCLI\DependencyInjection;
 
-use Sourcebox\HaveIBeenPwnedCLI\Service\Report\ReportServiceProvider;
 use Symfony\Component\DependencyInjection\Compiler\CompilerPassInterface;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 
+/**
+ * Class ReportServiceProviderPass
+ * @package Sourcebox\HaveIBeenPwnedCLI\DependencyInjection
+ */
 class ReportServiceProviderPass implements CompilerPassInterface
 {
+    /**
+     * Provider tag
+     */
     const TAG = 'report_service.provider';
 
     /**

@@ -2,6 +2,10 @@
 
 namespace Sourcebox\HaveIBeenPwnedCLI\Service\Report;
 
+/**
+ * Class ReportServiceProvider
+ * @package Sourcebox\HaveIBeenPwnedCLI\Service\Report
+ */
 class ReportServiceProvider
 {
     /**

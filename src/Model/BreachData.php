@@ -2,6 +2,10 @@
 
 namespace Sourcebox\HaveIBeenPwnedCLI\Model;
 
+/**
+ * Class BreachData
+ * @package Sourcebox\HaveIBeenPwnedCLI\Model
+ */
 class BreachData
 {
     /**

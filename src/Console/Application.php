@@ -7,7 +7,14 @@ use Symfony\Component\Console\Input\InputInterface;
 
 class Application extends BaseApplication
 {
+    /**
+     * Application name
+     */
     const NAME = 'HaveIBeenPwned CLI Checker';
+
+    /**
+     * Application version
+     */
     const VERSION = '1.0';
 
     /**

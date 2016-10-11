@@ -2,6 +2,10 @@
 
 namespace Sourcebox\HaveIBeenPwnedCLI\Model;
 
+/**
+ * Class Account
+ * @package Sourcebox\HaveIBeenPwnedCLI\Model
+ */
 class Account
 {
     /**
