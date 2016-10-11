@@ -5,6 +5,9 @@ services:
     console_output:
         class: Symfony\Component\Console\Output\ConsoleOutput
 
+    sourcebox.report_service.provider:
+        class: Sourcebox\HaveIBeenPwnedCLI\Service\Provider\ReportServiceProvider
+
     sourcebox.have_ibeen_pwned_cli.service.have_ibeen_pwned_breach_data_finder_service:
         class: Sourcebox\HaveIBeenPwnedCLI\Service\HaveIBeenPwnedBreachDataFinderService
         arguments:
@@ -14,11 +17,13 @@ services:
         class: Sourcebox\HaveIBeenPwnedCLI\Service\ConsoleTableReportService
         arguments:
             - "@console_output"
+        tags:
+            - { name: report_service.provider, alias: console }
 
     sourcebox.have_ibeen_pwned_cli.console.command.csv_checker_command:
         class: Sourcebox\HaveIBeenPwnedCLI\Console\Command\CsvCheckerCommand
         arguments:
             - "@sourcebox.have_ibeen_pwned_cli.service.have_ibeen_pwned_breach_data_finder_service"
-            - "@sourcebox.have_ibeen_pwned_cli.service.console_table_report_service"
+            - "@sourcebox.report_service.provider"
         tags:
             - { name: console.command }

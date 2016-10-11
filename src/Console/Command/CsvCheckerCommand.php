@@ -5,6 +5,7 @@ namespace Sourcebox\HaveIBeenPwnedCLI\Console\Command;
 use League\Csv\Reader;
 use Sourcebox\HaveIBeenPwnedCLI\Model\BreachData;
 use Sourcebox\HaveIBeenPwnedCLI\Service\BreachDataFinderServiceInterface;
+use Sourcebox\HaveIBeenPwnedCLI\Service\Provider\ReportServiceProvider;
 use Sourcebox\HaveIBeenPwnedCLI\Service\ReportServiceInterface;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Helper\ProgressBar;
@@ -15,9 +16,9 @@ use Symfony\Component\Console\Output\OutputInterface;
 class CsvCheckerCommand extends Command
 {
     /**
-     * @var ReportServiceInterface
+     * @var ReportServiceProvider
      */
-    private $reportService;
+    private $reportServiceProvider;
 
     /**
      * @var BreachDataFinderServiceInterface
@@ -27,14 +28,14 @@ class CsvCheckerCommand extends Command
     /**
      * CsvCheckerCommand constructor.
      * @param BreachDataFinderServiceInterface $breachDataFinderService
-     * @param ReportServiceInterface $reportService
+     * @param ReportServiceProvider $reportServiceProvider
      */
     public function __construct(
         BreachDataFinderServiceInterface $breachDataFinderService,
-        ReportServiceInterface $reportService
+        ReportServiceProvider $reportServiceProvider
     ) {
         $this->breachDataFinderService = $breachDataFinderService;
-        $this->reportService = $reportService;
+        $this->reportServiceProvider = $reportServiceProvider;
 
         parent::__construct();
     }
@@ -46,7 +47,10 @@ class CsvCheckerCommand extends Command
     {
         $this->setName('check:csv')
             ->setDescription('Checks https://haveibeenpwned.com\'s API using provided CSV of user names/emails')
-            ->addArgument('csv', InputArgument::REQUIRED, 'Path to CSV file');
+            ->addArgument('csv', InputArgument::REQUIRED, 'Path to CSV file')
+            ->addArgument('reporter', InputArgument::REQUIRED, sprintf(
+                'Report service to use %s', implode(', ', $this->reportServiceProvider->getReportServiceAliasList())
+            ));
     }
 
     /**
@@ -86,7 +90,7 @@ class CsvCheckerCommand extends Command
         $progress->finish();
         $progress->clear();
 
-        $this->reportService->report($breachData);
+        $this->reportServiceProvider->getReportService($input->getArgument('reporter'))->report($breachData);
     }
 
     /**
