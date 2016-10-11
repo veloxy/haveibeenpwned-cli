@@ -1,11 +1,11 @@
 <?php
 
-
 namespace Sourcebox\HaveIBeenPwnedCLI\Console\Command;
 
 use Sourcebox\HaveIBeenPwnedCLI\Model\Account;
-use Sourcebox\HaveIBeenPwnedCLI\Service\BreachDataFinderServiceInterface;
-use Sourcebox\HaveIBeenPwnedCLI\Service\ReportServiceInterface;
+use Sourcebox\HaveIBeenPwnedCLI\Service\Finder\FinderServiceInterface;
+use Sourcebox\HaveIBeenPwnedCLI\Service\Report\ReportServiceInterface;
+use Sourcebox\HaveIBeenPwnedCLI\Service\Report\ReportServiceProvider;
 
 class CsvCheckerCommandTest extends \PHPUnit_Framework_TestCase
 {
@@ -30,13 +30,15 @@ class CsvCheckerCommandTest extends \PHPUnit_Framework_TestCase
      */
     public function testGetBreachedAccountData($methodReturnValue = null, $methodArgs = [], $expectedResult = null)
     {
-        $breachDataFinder = $this->createMock(BreachDataFinderServiceInterface::class);
+        $breachDataFinder = $this->createMock(FinderServiceInterface::class);
         $breachDataFinder->method('findBreachDataForAccountIdentifier')
             ->willReturn($methodReturnValue);
 
         $reportService = $this->createMock(ReportServiceInterface::class);
+        $reportServiceProvider = new ReportServiceProvider();
+        $reportServiceProvider->addReportService('console', $reportService);
 
-        $csvCheckerCommand = new CsvCheckerCommand($breachDataFinder, $reportService);
+        $csvCheckerCommand = new CsvCheckerCommand($breachDataFinder, $reportServiceProvider);
 
         $class = new \ReflectionClass($csvCheckerCommand);
         $method = $class->getMethod('getBreachedAccountData');
@@ -52,11 +54,14 @@ class CsvCheckerCommandTest extends \PHPUnit_Framework_TestCase
 
     public function testGetBreachedAccountDataException()
     {
-        $breachDataFinder = $this->createMock(BreachDataFinderServiceInterface::class);
+        $breachDataFinder = $this->createMock(FinderServiceInterface::class);
         $breachDataFinder->method('findBreachDataForAccountIdentifier')->willThrowException(new \Exception());
 
         $reportService = $this->createMock(ReportServiceInterface::class);
-        $csvCheckerCommand = new CsvCheckerCommand($breachDataFinder, $reportService);
+        $reportServiceProvider = new ReportServiceProvider();
+        $reportServiceProvider->addReportService('console', $reportService);
+
+        $csvCheckerCommand = new CsvCheckerCommand($breachDataFinder, $reportServiceProvider);
 
         $class = new \ReflectionClass($csvCheckerCommand);
         $method = $class->getMethod('getBreachedAccountData');

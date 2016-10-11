@@ -1,12 +1,12 @@
 <?php
 
-namespace Sourcebox\HaveIBeenPwnedCLI\Service;
+namespace Sourcebox\HaveIBeenPwnedCLI\Service\Finder;
 
 use Sourcebox\HaveIBeenPwnedCLI\Model\Account;
 use Sourcebox\HaveIBeenPwnedCLI\Model\Breach;
 use xsist10\HaveIBeenPwned\HaveIBeenPwned;
 
-class HaveIBeenPwnedBreachDataFinderService implements BreachDataFinderServiceInterface
+class HaveIBeenPwnedFinderService implements FinderServiceInterface
 {
     /**
      * @var HaveIBeenPwned
@@ -14,7 +14,7 @@ class HaveIBeenPwnedBreachDataFinderService implements BreachDataFinderServiceIn
     private $haveIBeenPwned;
 
     /**
-     * HaveIBeenPwnedBreachDataFinderService constructor.
+     * HaveIBeenPwnedFinderService constructor.
      * @param HaveIBeenPwned $haveIBeenPwned
      */
     public function __construct(HaveIBeenPwned $haveIBeenPwned)

@@ -1,6 +1,5 @@
 <?php
-
-namespace Sourcebox\HaveIBeenPwnedCLI\Service;
+namespace Sourcebox\HaveIBeenPwnedCLI\Service\Report;
 
 use Sourcebox\HaveIBeenPwnedCLI\Model\Account;
 use Sourcebox\HaveIBeenPwnedCLI\Model\Breach;
@@ -34,7 +33,7 @@ class ConsoleTableReportServiceTest extends \PHPUnit_Framework_TestCase
             ->setName('BreadName 1');
 
         $breaches = [
-            $firstBreach
+            $firstBreach,
         ];
 
         $account = new Account();
