@@ -2,7 +2,7 @@
 
 namespace Sourcebox\HaveIBeenPwnedCLI\DependencyInjection;
 
-use Sourcebox\HaveIBeenPwnedCLI\Service\Provider\ReportServiceProvider;
+use Sourcebox\HaveIBeenPwnedCLI\Service\Report\ReportServiceProvider;
 use Symfony\Component\DependencyInjection\Compiler\CompilerPassInterface;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Reference;

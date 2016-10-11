@@ -1,10 +1,10 @@
 <?php
 
-namespace Sourcebox\HaveIBeenPwnedCLI\Service;
+namespace Sourcebox\HaveIBeenPwnedCLI\Service\Finder;
 
 use Sourcebox\HaveIBeenPwnedCLI\Model\Account;
 
-interface BreachDataFinderServiceInterface
+interface FinderServiceInterface
 {
     /**
      * @param string $identifier

@@ -1,19 +1,17 @@
 <?php
 
-namespace Sourcebox\HaveIBeenPwnedCLI\Service\Provider;
-
-use Sourcebox\HaveIBeenPwnedCLI\Service\ReportServiceInterface;
+namespace Sourcebox\HaveIBeenPwnedCLI\Service\Report;
 
 class ReportServiceProvider
 {
     /**
-     * @var ReportServiceInterface[]
+     * @var \Sourcebox\HaveIBeenPwnedCLI\Service\Report\ReportServiceInterface[]
      */
     private $reportServices = [];
 
     /**
      * @param $alias
-     * @param ReportServiceInterface $reportService
+     * @param \Sourcebox\HaveIBeenPwnedCLI\Service\Report\ReportServiceInterface $reportService
      */
     public function addReportService($alias, ReportServiceInterface $reportService)
     {
@@ -22,7 +20,7 @@ class ReportServiceProvider
 
     /**
      * @param $alias
-     * @return ReportServiceInterface
+     * @return \Sourcebox\HaveIBeenPwnedCLI\Service\Report\ReportServiceInterface
      * @throws \Exception
      */
     public function getReportService($alias)
@@ -34,6 +32,9 @@ class ReportServiceProvider
         throw new \Exception(sprintf('Service with alias "%s" not found'), $alias);
     }
 
+    /**
+     * @return array
+     */
     public function getReportServiceAliasList()
     {
         return array_keys($this->reportServices);

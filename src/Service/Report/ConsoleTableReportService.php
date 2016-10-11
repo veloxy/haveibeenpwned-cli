@@ -1,10 +1,11 @@
 <?php
 
-namespace Sourcebox\HaveIBeenPwnedCLI\Service;
+namespace Sourcebox\HaveIBeenPwnedCLI\Service\Report;
 
 use Sourcebox\HaveIBeenPwnedCLI\Model\Account;
 use Sourcebox\HaveIBeenPwnedCLI\Model\Breach;
 use Sourcebox\HaveIBeenPwnedCLI\Model\BreachData;
+use Sourcebox\HaveIBeenPwnedCLI\Service\Report\ReportServiceInterface;
 use Symfony\Component\Console\Helper\Table;
 use Symfony\Component\Console\Helper\TableSeparator;
 use Symfony\Component\Console\Output\ConsoleOutputInterface;

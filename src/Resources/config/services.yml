@@ -6,15 +6,15 @@ services:
         class: Symfony\Component\Console\Output\ConsoleOutput
 
     sourcebox.report_service.provider:
-        class: Sourcebox\HaveIBeenPwnedCLI\Service\Provider\ReportServiceProvider
+        class: Sourcebox\HaveIBeenPwnedCLI\Service\Report\ReportServiceProvider
 
     sourcebox.have_ibeen_pwned_cli.service.have_ibeen_pwned_breach_data_finder_service:
-        class: Sourcebox\HaveIBeenPwnedCLI\Service\HaveIBeenPwnedBreachDataFinderService
+        class: Sourcebox\HaveIBeenPwnedCLI\Service\Finder\HaveIBeenPwnedFinderService
         arguments:
             - "@have_i_been_pwnded"
 
     sourcebox.have_ibeen_pwned_cli.service.console_table_report_service:
-        class: Sourcebox\HaveIBeenPwnedCLI\Service\ConsoleTableReportService
+        class: Sourcebox\HaveIBeenPwnedCLI\Service\Report\ConsoleTableReportService
         arguments:
             - "@console_output"
         tags:

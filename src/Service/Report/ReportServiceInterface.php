@@ -1,6 +1,6 @@
 <?php
 
-namespace Sourcebox\HaveIBeenPwnedCLI\Service;
+namespace Sourcebox\HaveIBeenPwnedCLI\Service\Report;
 
 use Sourcebox\HaveIBeenPwnedCLI\Model\BreachData;
 

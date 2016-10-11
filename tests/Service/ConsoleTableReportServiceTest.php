@@ -5,6 +5,7 @@ namespace Sourcebox\HaveIBeenPwnedCLI\Service;
 use Sourcebox\HaveIBeenPwnedCLI\Model\Account;
 use Sourcebox\HaveIBeenPwnedCLI\Model\Breach;
 use Sourcebox\HaveIBeenPwnedCLI\Model\BreachData;
+use Sourcebox\HaveIBeenPwnedCLI\Service\Report\ConsoleTableReportService;
 use Symfony\Component\Console\Output\ConsoleOutput;
 use Symfony\Component\Console\Output\Output;
 

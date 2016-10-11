@@ -4,12 +4,13 @@ namespace Sourcebox\HaveIBeenPwnedCLI\Service;
 
 use Sourcebox\HaveIBeenPwnedCLI\Model\Account;
 use Sourcebox\HaveIBeenPwnedCLI\Model\Breach;
+use Sourcebox\HaveIBeenPwnedCLI\Service\Finder\HaveIBeenPwnedFinderService;
 use xsist10\HaveIBeenPwned\HaveIBeenPwned;
 
 class HaveIBeenPwnedBreachDataFinderServiceTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * @var HaveIBeenPwnedBreachDataFinderService
+     * @var HaveIBeenPwnedFinderService
      */
     private $haveIBeenPwnedBreachDataFinderService;
 
@@ -32,7 +33,7 @@ class HaveIBeenPwnedBreachDataFinderServiceTest extends \PHPUnit_Framework_TestC
                 ],
             ]);
 
-        $this->haveIBeenPwnedBreachDataFinderService = new HaveIBeenPwnedBreachDataFinderService($haveIBeenPwnedMock);
+        $this->haveIBeenPwnedBreachDataFinderService = new HaveIBeenPwnedFinderService($haveIBeenPwnedMock);
     }
 
     public function testFindBreachDataForAccountIdentifier()
@@ -86,7 +87,7 @@ class HaveIBeenPwnedBreachDataFinderServiceTest extends \PHPUnit_Framework_TestC
         $haveIBeenPwnedMock->method('checkAccount')
             ->willReturn([]);
 
-        $haveIBeenPwnedBreachDataFinderService = new HaveIBeenPwnedBreachDataFinderService($haveIBeenPwnedMock);
+        $haveIBeenPwnedBreachDataFinderService = new HaveIBeenPwnedFinderService($haveIBeenPwnedMock);
         $actual = $haveIBeenPwnedBreachDataFinderService->findBreachDataForAccountIdentifier($accountName);
 
         $this->assertEquals($account, $actual);
