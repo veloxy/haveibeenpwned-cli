@@ -1,13 +1,12 @@
 <?php
 
-namespace Sourcebox\HaveIBeenPwnedCLI\Service;
+namespace Sourcebox\HaveIBeenPwnedCLI\Service\Finder;
 
 use Sourcebox\HaveIBeenPwnedCLI\Model\Account;
 use Sourcebox\HaveIBeenPwnedCLI\Model\Breach;
-use Sourcebox\HaveIBeenPwnedCLI\Service\Finder\HaveIBeenPwnedFinderService;
 use xsist10\HaveIBeenPwned\HaveIBeenPwned;
 
-class HaveIBeenPwnedBreachDataFinderServiceTest extends \PHPUnit_Framework_TestCase
+class HaveIBeenPwnedFinderServiceTest extends \PHPUnit_Framework_TestCase
 {
     /**
      * @var HaveIBeenPwnedFinderService

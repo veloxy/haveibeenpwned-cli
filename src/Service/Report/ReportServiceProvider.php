@@ -29,7 +29,7 @@ class ReportServiceProvider
             return $this->reportServices[$alias];
         }
 
-        throw new \Exception(sprintf('Service with alias "%s" not found'), $alias);
+        throw new \Exception(sprintf('Service with alias "%s" not found', $alias));
     }
 
     /**
