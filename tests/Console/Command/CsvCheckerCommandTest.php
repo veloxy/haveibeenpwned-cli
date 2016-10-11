@@ -1,6 +1,5 @@
 <?php
 
-
 namespace Sourcebox\HaveIBeenPwnedCLI\Console\Command;
 
 use Sourcebox\HaveIBeenPwnedCLI\Model\Account;

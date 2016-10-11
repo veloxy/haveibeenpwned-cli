@@ -49,7 +49,8 @@ class CsvCheckerCommand extends Command
             ->setDescription('Checks https://haveibeenpwned.com\'s API using provided CSV of user names/emails')
             ->addArgument('csv', InputArgument::REQUIRED, 'Path to CSV file')
             ->addOption('report', 'r', InputOption::VALUE_REQUIRED, sprintf(
-                'Report service to use %s', implode(', ', $this->reportServiceProvider->getReportServiceAliasList())
+                'Report service to use %s',
+                implode(', ', $this->reportServiceProvider->getReportServiceAliasList())
             ));
     }
 
