@@ -3,24 +3,27 @@
 namespace Sourcebox\HaveIBeenPwnedCLI\DependencyInjection;
 
 use Sourcebox\HaveIBeenPwnedCLI\Service\Report\ReportServiceInterface;
-use Sourcebox\HaveIBeenPwnedCLI\Service\Report\ReportServiceProvider;
+use Sourcebox\HaveIBeenPwnedCLI\Service\ServiceProvider;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 
 class ReportServiceProviderPassTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * @var ReportServiceProviderPass
+     * @var ServiceProviderPass
      */
     private $reportServiceProviderPass;
 
     public function setUp()
     {
-        $this->reportServiceProviderPass = new ReportServiceProviderPass();
+        $this->reportServiceProviderPass = new ServiceProviderPass(
+            'sourcebox.report_service.provider',
+            'report_service.provider'
+        );
     }
 
     public function testProcess()
     {
-        $reportServiceProvider = new ReportServiceProvider();
+        $reportServiceProvider = new ServiceProvider();
         $reportService = $this->createMock(ReportServiceInterface::class);
 
         $container = new ContainerBuilder();
@@ -34,7 +37,7 @@ class ReportServiceProviderPassTest extends \PHPUnit_Framework_TestCase
 
         $this->assertEquals(
             $reportService,
-            $container->get('sourcebox.report_service.provider')->getReportService('console')
+            $container->get('sourcebox.report_service.provider')->getServiceByAlias('console')
         );
     }
 }

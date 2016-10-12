@@ -5,7 +5,7 @@ namespace Sourcebox\HaveIBeenPwnedCLI\Console\Command;
 use League\Csv\Reader;
 use Sourcebox\HaveIBeenPwnedCLI\Model\BreachData;
 use Sourcebox\HaveIBeenPwnedCLI\Service\Finder\FinderServiceInterface;
-use Sourcebox\HaveIBeenPwnedCLI\Service\Report\ReportServiceProvider;
+use Sourcebox\HaveIBeenPwnedCLI\Service\ServiceProviderInterface;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Helper\ProgressBar;
 use Symfony\Component\Console\Input\InputArgument;
@@ -16,25 +16,25 @@ use Symfony\Component\Console\Output\OutputInterface;
 class CsvCheckerCommand extends Command
 {
     /**
-     * @var ReportServiceProvider
+     * @var ServiceProviderInterface
      */
     private $reportServiceProvider;
 
     /**
-     * @var FinderServiceInterface
+     * @var ServiceProviderInterface
      */
-    private $breachDataFinderService;
+    private $finderServiceProvider;
 
     /**
      * CsvCheckerCommand constructor.
-     * @param \Sourcebox\HaveIBeenPwnedCLI\Service\Finder\FinderServiceInterface $breachDataFinderService
-     * @param ReportServiceProvider $reportServiceProvider
+     * @param ServiceProviderInterface $breachDataFinderService
+     * @param ServiceProviderInterface $reportServiceProvider
      */
     public function __construct(
-        FinderServiceInterface $breachDataFinderService,
-        ReportServiceProvider $reportServiceProvider
+        ServiceProviderInterface $breachDataFinderService,
+        ServiceProviderInterface $reportServiceProvider
     ) {
-        $this->breachDataFinderService = $breachDataFinderService;
+        $this->finderServiceProvider = $breachDataFinderService;
         $this->reportServiceProvider = $reportServiceProvider;
 
         parent::__construct();
@@ -50,8 +50,12 @@ class CsvCheckerCommand extends Command
             ->addArgument('csv', InputArgument::REQUIRED, 'Path to CSV file')
             ->addOption('report', 'r', InputOption::VALUE_REQUIRED, sprintf(
                 'Report service to use %s',
-                implode(', ', $this->reportServiceProvider->getReportServiceAliasList())
-            ));
+                implode(', ', $this->reportServiceProvider->getServiceAliasList())
+            ), 'console')
+            ->addOption('finder', 'f', InputOption::VALUE_REQUIRED, sprintf(
+                'Finder service to use %s',
+                implode(', ', $this->finderServiceProvider->getServiceAliasList())
+            ), 'haveibeenpwned');
     }
 
     /**
@@ -60,6 +64,9 @@ class CsvCheckerCommand extends Command
     protected function execute(InputInterface $input, OutputInterface $output)
     {
         $accountIdentifiers = Reader::createFromPath($input->getArgument('csv'))->fetchAll();
+
+        $finderService = $this->finderServiceProvider->getServiceByAlias($input->getOption('finder'));
+        $reportService = $this->reportServiceProvider->getServiceByAlias($input->getOption('report'));
 
         $progress = new ProgressBar($output, count($accountIdentifiers));
         $progress->start();
@@ -75,7 +82,7 @@ class CsvCheckerCommand extends Command
                 return;
             }
 
-            $account = $this->getBreachedAccountData($accountIdentifier);
+            $account = $this->getBreachedAccountData($accountIdentifier, $finderService);
             if ($account) {
                 $breachData->addAccount($account);
             }
@@ -89,17 +96,18 @@ class CsvCheckerCommand extends Command
         $progress->finish();
         $progress->clear();
 
-        $this->reportServiceProvider->getReportService($input->getOption('report'))->report($breachData);
+        $reportService->report($breachData);
     }
 
     /**
      * @param $accountIdentifier
+     * @param FinderServiceInterface $finder
      * @return \Sourcebox\HaveIBeenPwnedCLI\Model\Account|void
      */
-    private function getBreachedAccountData($accountIdentifier)
+    private function getBreachedAccountData($accountIdentifier, $finder)
     {
         try {
-            $account = $this->breachDataFinderService->findBreachDataForAccountIdentifier($accountIdentifier);
+            $account = $finder->findBreachDataForAccountIdentifier($accountIdentifier);
         } catch (\Exception $e) {
             return;
         }
