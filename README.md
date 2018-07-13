@@ -9,7 +9,7 @@ This is a CLI tool to check a csv of email addresses and usernames in https://ha
 
 ## Requirements
 
-- PHP 5.6+
+- PHP >=5.6
 - Composer
 
 ## Installation
